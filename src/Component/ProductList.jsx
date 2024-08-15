@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import useAxiosCommon from '../../hooks/useAxiosSecure';
+import useAxiosCommon from '../hooks/useAxiosCommon';
 import { useQuery } from '@tanstack/react-query';
-import { format } from 'date-fns';
-import useAxiosSecure from '../../hooks/useAxiosSecure';
-import Swal from 'sweetalert2';
-import useAuth from '../../hooks/useAuth';
-import UpdateAssetModal from '../../Component/Modal/UpdateAssetModal';
+import useAuth from '../hooks/useAuth';
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import ProductCard from './ProductCard';
+
 const ProductList = () => {
   const { user } = useAuth();
   const axiosCommon = useAxiosCommon();
-  const axiosSecure = useAxiosSecure();
+
   const [search, setSearch] = useState('');
   const [searchText, setSearchText] = useState('');
   const [itemperPage, setItemperPage] = useState(10);
@@ -21,7 +18,7 @@ const ProductList = () => {
   const [sort, setSort] = useState('');
   const [availability, setAvailability] = useState('');
   // const [isOpen, setIsOpen] = useState(false);
-  const [isEditModal, setIsEditModal] = useState(false);
+
   console.log(sort);
   const {
     data: allAssets = [],
@@ -30,7 +27,7 @@ const ProductList = () => {
   } = useQuery({
     queryFn: async () => {
       const { data } = await axiosCommon(
-        `/all-assets/${user?.email}?page=${currentPage}&size=${itemperPage}&search=${search}&filter=${filter}&sort=${sort}&availability=${availability}`
+        `/all-product?page=${currentPage}&size=${itemperPage}&search=${search}&filter=${filter}&sort=${sort}&availability=${availability}`
       );
       console.log(data);
       return data;
@@ -82,7 +79,7 @@ const ProductList = () => {
 
       return data;
     },
-    queryKey: ['assetCount', search],
+    queryKey: ['assetCount', search, filter, count],
   });
 
   const handlePreviouspage = () => {
@@ -97,13 +94,10 @@ const ProductList = () => {
   };
   return (
     <div className="mx-w-5xl pt-24 mx-auto px-5 md:px-8 lg:px-20 ">
-      <Helmet>
-        <title>Hr | Asset List</title>
-      </Helmet>
       <h1 className="text-center text-4xl font-bold">
-        Asset <span className="text-[#FEBF32]">LIST</span>
+        PRODUCT <span className="text-[#FEBF32]">LIST</span>
       </h1>
-      <p className="text-center text-lg">Here Your All Assets</p>
+      <p className="text-center text-lg">Here Your All Product</p>
       <div className="flex flex-col lg:flex-row justify-center items-center gap-3">
         {/* search=================================== */}
 
@@ -191,7 +185,11 @@ const ProductList = () => {
           Reset
         </button>
       </div>
-      <div className="py-8"></div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {allAssets.map(product => (
+          <ProductCard key={product._id} product={product}></ProductCard>
+        ))}
+      </div>
       <div className="pagination ">
         <button onClick={handlePreviouspage}>Prev</button>
         {pages.map(p => (

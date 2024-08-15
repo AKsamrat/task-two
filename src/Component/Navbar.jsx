@@ -17,7 +17,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="">
+    <div className="z-10 fixed w-full mt-5">
       <div className=" mx-auto bg-gradient-to-r from-[#e5f6ffbe] from-30% via-[#02004307] via-40%  to-[#e5f6ffbe] rounded-t-2xl px-2 ">
         <header className="p-2 dark:bg-gray-100 dark:text-gray-800">
           <div className="container flex justify-between items-center  mx-auto">
