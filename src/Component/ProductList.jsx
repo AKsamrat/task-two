@@ -16,6 +16,7 @@ const ProductList = () => {
   const [count, setCount] = useState(0);
   const [filter, setFilter] = useState('');
   const [sort, setSort] = useState('');
+  const [dateSort, setDateSort] = useState('');
   const [availability, setAvailability] = useState('');
   // const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +28,7 @@ const ProductList = () => {
   } = useQuery({
     queryFn: async () => {
       const { data } = await axiosCommon(
-        `/all-product?page=${currentPage}&size=${itemperPage}&search=${search}&filter=${filter}&sort=${sort}&availability=${availability}`
+        `/all-product?page=${currentPage}&size=${itemperPage}&search=${search}&filter=${filter}&sort=${sort}&availability=${availability}&dateSort=${dateSort}`
       );
       console.log(data);
       return data;
@@ -41,6 +42,7 @@ const ProductList = () => {
       itemperPage,
       sort,
       availability,
+      dateSort,
     ],
   });
   const handleSearch = e => {
@@ -137,10 +139,10 @@ const ProductList = () => {
             className="px-1 md:px-4 py-2 border text-sm rounded-lg border-[#FEBF32]"
           >
             <option value="" className="font-semibold">
-              Filter By Type
+              Cat. By Brand
             </option>
-            <option value="returnable">Returnable</option>
-            <option value="non-returnable">Non-Returnable</option>
+            <option value="Adidas">Adidas</option>
+            <option value="Nike">Nike</option>
           </select>
         </div>
         {/* Filter=========================================== */}
@@ -155,9 +157,10 @@ const ProductList = () => {
             id="sort"
             className="px-1 md:px-4 py-2 border text-sm rounded-lg border-[#FEBF32]"
           >
-            <option value="">Filter By Availability</option>
-            <option value="available">Available</option>
-            <option value="Out Of Stock">Out Of Stock</option>
+            <option value="">Category Name</option>
+            <option value="Accessories">Accessories</option>
+            <option value="Apparel">Apparel</option>
+            <option value="Footwear">Footwear</option>
           </select>
         </div>
         {/* sort=========================================== */}
@@ -173,9 +176,25 @@ const ProductList = () => {
             id="sort"
             className="px-1 md:px-4 py-2 border text-sm rounded-lg border-[#FEBF32]"
           >
-            <option value="">Sort By Quantity</option>
-            <option value="dsc">Descending Order</option>
-            <option value="asc">Ascending Order</option>
+            <option value="">Sort By Price</option>
+            <option value="dsc">High to Low</option>
+            <option value="asc">Low to High</option>
+          </select>
+        </div>
+        <div>
+          <select
+            onChange={e => {
+              setDateSort(e.target.value);
+              // setCurrentPage(1);
+            }}
+            value={dateSort}
+            name="sort"
+            id="sort"
+            className="px-1 md:px-4 py-2 border text-sm rounded-lg border-[#FEBF32]"
+          >
+            <option value="">Sort By Price</option>
+            <option value="dsc">Old First</option>
+            <option value="asc">Newest first</option>
           </select>
         </div>
         <button
