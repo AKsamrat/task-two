@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-
+import avatarImg from '../assets/placeholder.jpg';
 import { GoArrowUpRight } from 'react-icons/go';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
+import { AiOutlineMenu } from 'react-icons/ai';
 
 const Navbar = () => {
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth();
+  const { user, logOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleLogout = () => {
-    logout();
-    console.log('logout');
+    logOut();
     navigate('/login');
   };
 
   return (
     <div className="">
-      <div className="max-w-7xl mx-auto bg-gradient-to-r from-[#e5f6ffbe] from-30% via-[#02004307] via-40%  to-[#e5f6ffbe] rounded-t-2xl px-2 ">
+      <div className=" mx-auto bg-gradient-to-r from-[#e5f6ffbe] from-30% via-[#02004307] via-40%  to-[#e5f6ffbe] rounded-t-2xl px-2 ">
         <header className="p-2 dark:bg-gray-100 dark:text-gray-800">
           <div className="container flex justify-between items-center  mx-auto">
             <a
@@ -33,80 +33,62 @@ const Navbar = () => {
               <img className="w-28 h-14" src="sk_logo.png" alt="" />
             </a>
 
-            <div>
-              <div className="items-center flex-shrink-0 hidden lg:flex">
-                {user ? (
-                  <Link
-                    onClick={handleLogout}
-                    className="self-center  py-2 border-slate-500  flex justify-center items-center gap-1 border-2 rounded-xl px-3 "
-                  >
-                    LogOut <GoArrowUpRight />
-                  </Link>
-                ) : (
-                  <Link
-                    to={'/login'}
-                    className="self-center  py-2 border-blue-400  flex justify-center items-center gap-1 border-2 rounded-xl px-3 "
-                  >
-                    LogIn <GoArrowUpRight />
-                  </Link>
-                )}
-              </div>
-              <div className="relative">
-                <button
-                  onClick={() => setIsOpen(!isOpen)}
-                  className="p-4 lg:hidden"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    className="w-6 h-6 dark:text-gray-800"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M4 6h16M4 12h16M4 18h16"
-                    ></path>
-                  </svg>
-                </button>
-                {isOpen && (
-                  <div className="absolute rounded-xl shadow-md w-[40vw] md:w-[10vw] bg-white overflow-hidden right-0 top-12 text-sm">
-                    <div className="flex flex-col cursor-pointer">
-                      {/* {role === 'User' && <UserMenue></UserMenue>}
-                    {role === 'Agent' && <AgentMenue />}
-                    {role === 'Admin' && <AdminMenue />} */}
+            <div className="relative">
+              <div className="flex flex-row items-center gap-3">
+                {/* Become A Host btn */}
+                <div className="hidden md:block">{/* )} */}</div>
 
-                      {user ? (
-                        <>
-                          <div
-                            onClick={handleLogout}
-                            className="px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer"
-                          >
-                            Logout
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <Link
-                            to="/login"
-                            className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
-                          >
-                            Login
-                          </Link>
-                          <Link
-                            to="/signup"
-                            className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
-                          >
-                            Sign Up
-                          </Link>
-                        </>
-                      )}
-                    </div>
+                {/* Dropdown btn */}
+                <div
+                  onClick={() => setIsOpen(!isOpen)}
+                  className="p-4 md:py-1 md:px-2 border-[1px] border-neutral-200 flex flex-row items-center gap-3 rounded-full cursor-pointer hover:shadow-md transition"
+                >
+                  <AiOutlineMenu />
+                  <div className="hidden md:block">
+                    {/* Avatar */}
+                    <img
+                      className="rounded-full"
+                      referrerPolicy="no-referrer"
+                      src={user && user.photoURL ? user.photoURL : avatarImg}
+                      alt="profile"
+                      height="30"
+                      width="30"
+                    />
                   </div>
-                )}
+                </div>
               </div>
+              {isOpen && (
+                <div className="absolute rounded-xl shadow-md w-[40vw] md:w-[10vw] bg-white overflow-hidden right-0 top-12 text-sm">
+                  <div className="flex flex-col cursor-pointer">
+                    {user ? (
+                      <>
+                        <p className="pl-4">{user?.displayName}</p>
+                        <div
+                          onClick={handleLogout}
+                          className="px-4 py-3 hover:bg-neutral-100 transition font-semibold cursor-pointer"
+                        >
+                          Logout
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/login"
+                          className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                        >
+                          Login
+                        </Link>
+                        <Link
+                          to="/signup"
+                          className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                        >
+                          Sign Up
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </header>

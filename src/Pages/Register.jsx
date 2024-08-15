@@ -1,165 +1,169 @@
-import { useContext, useState } from 'react';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
-import regImg from '../assets/registerr.png';
-import { useForm } from 'react-hook-form';
-import { AuthContext } from '../Provider/AuthProvider';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { getAuth, updateProfile } from 'firebase/auth';
-
-import app from '../Firebase/Firebase.config';
+import { Link, useNavigate } from 'react-router-dom';
+import { FcGoogle } from 'react-icons/fc';
 import toast from 'react-hot-toast';
+import { TbFidgetSpinner } from 'react-icons/tb';
+import { useState } from 'react';
+import useAuth from '../hooks/useAuth';
+import { imageUpload } from '../api/util';
 
-const auth = getAuth(app);
-
-const Register = () => {
-  const { createUser } = useContext(AuthContext);
-  const [showPassword, setPassword] = useState(false);
-  const [registerError, setRegisterError] = useState('');
-
+const SignUpHr = () => {
+  const [startDate, setStartDate] = useState(new Date());
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location?.state ? location.state : '/';
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm();
-  const onSubmit = data => {
-    const { email, password } = data;
-    if (password.length < 6) {
-      setRegisterError('Password Should be minium 6 Charecter');
-      return;
-    } else if (!/[A-Z]/.test(password)) {
-      setRegisterError('Minimun add one upper case');
-      return;
-    } else if (!/[a-z]/.test(password)) {
-      setRegisterError('Minimun add one lower case');
-      return;
-    }
-    setRegisterError('');
+  const { createUser, googleLogin, profileUpdate, loading, setLoading } =
+    useAuth();
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const form = e.target;
+    const name = form.name.value;
+    const email = form.email.value;
+    const password = form.password.value;
+    const image = form.image.files[0];
 
-    createUser(email, password)
-      .then(result => {
-        updateProfile(auth.currentUser, {
-          displayName: data.name,
-          photoURL: data.photo,
-        }).then(result => {
-          toast('successfully register');
-          navigate(from, { replace: true });
-          // if (result.user) {
-          // }
-        });
-      })
-      .catch(error => {
-        toast('Email and Pass Problem');
-        console.log(data);
-      });
-    reset();
+    try {
+      setLoading(true);
+      const image_url = await imageUpload(image);
+      console.log(name);
+      //create user
+      const result = await createUser(email, password);
+      console.log(result);
+      navigate('/');
+      //save user name image
+      await profileUpdate(name, image_url);
+      toast.success('Signup Succesfully');
+      setLoading(false);
+    } catch (err) {
+      console.log(err);
+      toast.error('err.massage');
+      setLoading(false);
+    }
+  };
+  const handleGoogleSignIn = async () => {
+    try {
+      await googleLogin();
+      navigate('/');
+      toast.success('Signup Successful');
+    } catch (err) {
+      console.log(err);
+      toast.error('err.massage');
+    }
   };
 
   return (
-    <div>
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row">
-          <div className="text-center lg:text-left">
-            <h1 className="text-5xl font-bold mb-3 text-center">
-              Register Now!
-            </h1>
-            <img className="h-[75vh]" src={regImg} alt="" />
-          </div>
-          <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
-            <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Name</span>
-                </label>
-                <input
-                  {...register('name', { required: true })}
-                  name="name"
-                  type="text"
-                  placeholder="name"
-                  className="input input-bordered"
-                  required
-                />
-                {errors.name && <span>This field is required</span>}
-                <label className="label">
-                  <span className="label-text">Photo url</span>
-                </label>
-                <input
-                  {...register('photo', { required: true })}
-                  name="photo"
-                  type="text"
-                  placeholder="url"
-                  className="input input-bordered"
-                  required
-                />
-                {errors.photo && <span>This field is required</span>}
-                <label className="label">
-                  <span className="label-text">Email</span>
-                </label>
-                <input
-                  {...register('email', { required: true })}
-                  name="email"
-                  type="email"
-                  placeholder="email"
-                  className="input input-bordered"
-                  required
-                />
-                {errors.email && <span>This field is required</span>}
-              </div>
-              <label className="label">
-                <span className="label-text">Password</span>
-              </label>
-              <div className="relative">
-                <input
-                  {...register('password', { required: true })}
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  id="password"
-                  required
-                  placeholder="*****"
-                  className="w-full px-3 py-2 border rounded-md border-gray-300 bg-gray-50 dark:text-gray-800"
-                />
-                <span
-                  className="absolute top-3 right-2"
-                  onClick={() => setPassword(!showPassword)}
-                >
-                  {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
-                </span>
-              </div>
-              {registerError ? (
-                <p className="text-md font-semibold text-red-600">
-                  {registerError}
-                </p>
-              ) : (
-                <p></p>
-              )}
-              <div className="form-control mt-4">
-                <input
-                  className="btn bg-[#00C2CB] text-white"
-                  type="submit"
-                  value="Register"
-                ></input>
-              </div>
-            </form>
-
-            <p className="text-xs text-center sm:px-6 dark:text-gray-600 py-3">
-              Have an account?
-              <Link
-                to={'/login'}
-                rel="noopener noreferrer"
-                href="#"
-                className="underline dark:text-gray-800 text-[#00C2CB] font-bold"
-              >
-                Sign In
-              </Link>
-            </p>
-          </div>
+    <div className="flex justify-center items-center min-h-screen pt-16">
+      <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
+        <div className="mb-8 text-center">
+          <h1 className="my-3 text-4xl font-bold">Sign Up</h1>
+          <p className="text-sm text-gray-400">Welcome to Asset Management</p>
         </div>
+        <form
+          onSubmit={handleSubmit}
+          noValidate=""
+          action=""
+          className="space-y-6 ng-untouched ng-pristine ng-valid"
+        >
+          <div className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block mb-2 text-sm">
+                Name
+              </label>
+              <input
+                type="text"
+                name="name"
+                id="name"
+                placeholder="Enter Your Name Here"
+                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
+                data-temp-mail-org="0"
+              />
+            </div>
+
+            <div>
+              <label htmlFor="image" className="block mb-2 text-sm">
+                Select Your photo:
+              </label>
+              <input
+                required
+                type="file"
+                id="image"
+                name="image"
+                accept="image/*"
+              />
+            </div>
+            <div>
+              <label htmlFor="email" className="block mb-2 text-sm">
+                Email address
+              </label>
+              <input
+                type="email"
+                name="email"
+                id="email"
+                required
+                placeholder="Enter Your Email Here"
+                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
+                data-temp-mail-org="0"
+              />
+            </div>
+
+            <div>
+              <div className="flex justify-between">
+                <label htmlFor="password" className="text-sm mb-2">
+                  Password
+                </label>
+              </div>
+              <input
+                type="password"
+                name="password"
+                autoComplete="new-password"
+                id="password"
+                required
+                placeholder="*******"
+                className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
+              />
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              className="bg-[#FEBF32] w-full rounded-md py-3 text-white"
+            >
+              {loading ? (
+                <TbFidgetSpinner className="animate-spin mx-auto" />
+              ) : (
+                'Continue'
+              )}
+            </button>
+          </div>
+        </form>
+
+        <div className="flex items-center pt-4 space-x-1">
+          <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
+          <p className="px-3 text-sm dark:text-gray-400">
+            Signup with social accounts
+          </p>
+          <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
+        </div>
+        <button
+          onClick={handleGoogleSignIn}
+          disabled={loading}
+          className=" disabled:cursor-not-allowed  flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer"
+        >
+          <FcGoogle size={32} />
+
+          <p>Continue with Google</p>
+        </button>
+        <p className="px-6 text-sm text-center text-gray-400">
+          Already have an account?{' '}
+          <Link
+            to="/login"
+            className="hover:underline hover:text-[#FEBF32] text-gray-600 "
+          >
+            Login
+          </Link>
+          .
+        </p>
       </div>
     </div>
   );
 };
 
-export default Register;
+export default SignUpHr;

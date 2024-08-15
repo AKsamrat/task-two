@@ -68,14 +68,14 @@ const LoginPage = () => {
 
   return (
     <div>
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content flex-col lg:flex-row">
-          <div className="text-center lg:text-left">
+      <div className=" bg-base-200">
+        <div className="flex flex-col lg:flex-row justify-center items-center pb-10">
+          <div className="text-center ">
             <h1 className="text-5xl font-bold mb-8 text-center">Login now!</h1>
             <img className="h-[75vh]" src={loginImg} alt="" />
           </div>
-          <div className="card shrink-0 w-full max-w-sm shadow-2xl bg-base-100 mt-14">
-            <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
+          <div className=" w-full max-w-sm shadow-2xl bg-base-100 mt-14 p-6 rounded-2xl h-full">
+            <form onSubmit={handleSubmit(onSubmit)}>
               <button
                 onClick={() => handleSocialLogin(googleLogin)}
                 aria-label="Login with Google"
@@ -90,27 +90,29 @@ const LoginPage = () => {
                   Login with Google
                 </p>
               </button>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Email</span>
+
+              <div className="">
+                <label className="">
+                  <span className="">Email</span>
                 </label>
                 <input
                   {...register('email', { required: true })}
                   type="email"
                   placeholder="email"
-                  className="input input-bordered"
+                  className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-[#FEBF32] bg-gray-200 text-gray-900"
                   required
                 />
               </div>
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text">Password</span>
+
+              <div className="">
+                <label className="">
+                  <span className="">Password</span>
                 </label>
                 <input
                   {...register('password', { required: true })}
                   type="password"
                   placeholder="password"
-                  className="input input-bordered"
+                  className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-[#FEBF32] bg-gray-200 text-gray-900"
                   required
                 />
                 <label className="label">
@@ -119,9 +121,9 @@ const LoginPage = () => {
                   </a>
                 </label>
               </div>
-              <div className="form-control mt-4">
+              <div className=" mt-4">
                 <input
-                  className="btn bg-[#00C2CB] text-white"
+                  className="btn bg-[#00C2CB] text-white m-3 p-2 border-gray-300 rounded-2xl cursor-pointer w-full"
                   type="submit"
                   value="Login"
                 ></input>
