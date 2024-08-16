@@ -18,9 +18,10 @@ const ProductList = () => {
   const [sort, setSort] = useState('');
   const [dateSort, setDateSort] = useState('');
   const [availability, setAvailability] = useState('');
+  const [range, setRange] = useState('');
   // const [isOpen, setIsOpen] = useState(false);
 
-  console.log(sort);
+  console.log(range);
   const {
     data: allAssets = [],
     isLoading,
@@ -28,7 +29,7 @@ const ProductList = () => {
   } = useQuery({
     queryFn: async () => {
       const { data } = await axiosCommon(
-        `/all-product?page=${currentPage}&size=${itemperPage}&search=${search}&filter=${filter}&sort=${sort}&availability=${availability}&dateSort=${dateSort}`
+        `/all-product?page=${currentPage}&size=${itemperPage}&search=${search}&filter=${filter}&sort=${sort}&availability=${availability}&dateSort=${dateSort}&range=${range}`
       );
       console.log(data);
       return data;
@@ -43,6 +44,7 @@ const ProductList = () => {
       sort,
       availability,
       dateSort,
+      range,
     ],
   });
   const handleSearch = e => {
@@ -58,6 +60,8 @@ const ProductList = () => {
     setSort('');
     setFilter('');
     setAvailability('');
+    setDateSort('');
+    setRange('');
   };
 
   //for pagination------
@@ -81,7 +85,18 @@ const ProductList = () => {
 
       return data;
     },
-    queryKey: ['assetCount', search, filter, count],
+    queryKey: [
+      'assetCount',
+      filter,
+      count,
+      search,
+      currentPage,
+      itemperPage,
+      sort,
+      availability,
+      dateSort,
+      range,
+    ],
   });
 
   const handlePreviouspage = () => {
@@ -145,7 +160,7 @@ const ProductList = () => {
             <option value="Nike">Nike</option>
           </select>
         </div>
-        {/* Filter=========================================== */}
+        {/* Filter category=========================================== */}
         <div>
           <select
             onChange={e => {
@@ -163,7 +178,25 @@ const ProductList = () => {
             <option value="Footwear">Footwear</option>
           </select>
         </div>
-        {/* sort=========================================== */}
+        {/* Filter Range=========================================== */}
+        <div>
+          <select
+            onChange={e => {
+              setRange(e.target.value);
+              // setCurrentPage(1);
+            }}
+            value={range}
+            name="range"
+            id="range"
+            className="px-1 md:px-4 py-2 border text-sm rounded-lg border-[#FEBF32]"
+          >
+            <option value="">Price Range</option>
+            <option value="100">0-100</option>
+            <option value="200">101-200</option>
+            <option value="300">201-300</option>
+          </select>
+        </div>
+        {/* sort price=========================================== */}
 
         <div>
           <select
@@ -185,6 +218,7 @@ const ProductList = () => {
           <select
             onChange={e => {
               setDateSort(e.target.value);
+              setSort('');
               // setCurrentPage(1);
             }}
             value={dateSort}
@@ -192,9 +226,9 @@ const ProductList = () => {
             id="sort"
             className="px-1 md:px-4 py-2 border text-sm rounded-lg border-[#FEBF32]"
           >
-            <option value="">Sort By Price</option>
-            <option value="dsc">Old First</option>
-            <option value="asc">Newest first</option>
+            <option value="">Sort By date</option>
+            <option value="dsc">Newest First</option>
+            <option value="asc">Old first</option>
           </select>
         </div>
         <button

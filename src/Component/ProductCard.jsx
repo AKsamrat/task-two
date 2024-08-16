@@ -25,9 +25,12 @@ const ProductCard = ({ product }) => {
               src={product?.image}
               alt="Shoes"
             />
+            <div className="bg-green-400 px-3 py-1 rounded-2xl absolute top-12 right-16 font-bold">
+              {product?.brand}
+            </div>
           </figure>
           <div className=" ">
-            <div className="py-2">
+            <div className="flex justify-between items-center">
               <div
                 className=" flex gap-2 overflow-hidden  font-bold"
                 // data-aos="fade-left"
@@ -35,6 +38,9 @@ const ProductCard = ({ product }) => {
               >
                 <FaStar className="text-2xl text-yellow-600"></FaStar>
                 {product?.rating}
+              </div>
+              <div>
+                <p>{new Date(product?.added_time).toLocaleDateString()}</p>
               </div>
             </div>
             <h2
@@ -46,6 +52,7 @@ const ProductCard = ({ product }) => {
             </h2>
 
             <hr />
+            <p>{product?.category} </p>
             <div className="flex justify-between items-center my-2">
               <div className="flex items-center gap-2">
                 <p
