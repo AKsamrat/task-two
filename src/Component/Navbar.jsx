@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import avatarImg from '../assets/placeholder.jpg';
+import logo from '../assets/logo25.png';
 import { GoArrowUpRight } from 'react-icons/go';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
@@ -17,8 +18,8 @@ const Navbar = () => {
   };
 
   return (
-    <div className="z-10 fixed w-full mt-5">
-      <div className=" mx-auto bg-gradient-to-r from-[#e5f6ffbe] from-30% via-[#02004307] via-40%  to-[#e5f6ffbe] rounded-t-2xl px-2 ">
+    <div className=" z-10 fixed w-full mt-5 ">
+      <div className="max-w-7xl mx-auto bg-gradient-to-r from-[#e5f6ffbe] from-30% via-[#02004307] via-40%  to-[#e5f6ffbe] rounded-t-2xl  ">
         <header className="p-2 dark:bg-gray-100 dark:text-gray-800">
           <div className="container flex justify-between items-center  mx-auto">
             <a
@@ -30,7 +31,7 @@ const Navbar = () => {
               {/* <p className="text-3xl font-bold">
                 S-<span className="text-blue-600">Kash</span>
               </p> */}
-              <img className="w-28 h-14" src="sk_logo.png" alt="" />
+              <img className="w-36 h-14" src={logo} alt="" />
             </a>
 
             <div className="relative">
@@ -79,7 +80,7 @@ const Navbar = () => {
                           Login
                         </Link>
                         <Link
-                          to="/signup"
+                          to="/register"
                           className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
                         >
                           Sign Up
