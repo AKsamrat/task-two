@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useAxiosCommon from '../hooks/useAxiosCommon';
 import { useQuery } from '@tanstack/react-query';
-import useAuth from '../hooks/useAuth';
-import { Link } from 'react-router-dom';
 import ProductCard from './ProductCard';
 
 const ProductList = () => {
-  const { user } = useAuth();
   const axiosCommon = useAxiosCommon();
 
   const [search, setSearch] = useState('');
@@ -24,7 +21,7 @@ const ProductList = () => {
   console.log(range);
   const {
     data: allAssets = [],
-    isLoading,
+
     refetch,
   } = useQuery({
     queryFn: async () => {
