@@ -51,3 +51,36 @@ VITE_APPID= Your firebase code
 
 VITE_IMAGE_HOSTING_KEY=Your ibb hosting key
 ```
+
+## Deployment
+
+1.  **Deploying to Firebas**
+
+Create a new project in firebase:
+
+1. Install Firebase CLI:
+   ```bash
+    npm install -g firebase-tools
+   ```
+2. Login to firebae :
+   ```bash
+   firebase login
+   ```
+3. Initialize firebase
+
+   ```bash
+   firebase init
+   ```
+
+   Select "Hosting" and choose the project you want to deploy. Set 'dist' as the
+   public directory. Configure as a single-page app by answering Yes.
+
+4. Build the project: **Before build make sure to change the env file . The URL
+   will be your live server links**
+   ```bash
+     npm run build
+   ```
+5. Deploy to Firebase:
+   ```bash
+   firebase deploy
+   ```
