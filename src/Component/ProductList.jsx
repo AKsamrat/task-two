@@ -208,7 +208,6 @@ const ProductList = () => {
               <select
                 onChange={e => {
                   setSort(e.target.value);
-                  // setCurrentPage(1);
                 }}
                 value={sort}
                 name="sort"

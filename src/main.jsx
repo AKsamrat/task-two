@@ -11,6 +11,7 @@ import AuthProvider from './Provider/AuthProvider';
 import Home from './Pages/Home';
 import LoginPage from './Pages/LoginPage';
 import Register from './Pages/Register';
+import Contact from './Pages/Contact';
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register></Register>,
+      },
+      {
+        path: '/contact',
+        element: <Contact></Contact>,
       },
     ],
   },

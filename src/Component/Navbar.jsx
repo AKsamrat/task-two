@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import avatarImg from '../assets/placeholder.jpg';
 import logo from '../assets/logo25.png';
 import { GoArrowUpRight } from 'react-icons/go';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 import { AiOutlineMenu } from 'react-icons/ai';
 
@@ -33,6 +33,37 @@ const Navbar = () => {
               </p> */}
               <img className="w-36 h-14" src={logo} alt="" />
             </a>
+            <ul className="flex justify-center items-center gap-2">
+              <li>
+                <NavLink
+                  to="/"
+                  className={({ isActive, isPending }) =>
+                    isPending
+                      ? 'pending'
+                      : isActive
+                      ? 'text-green-400 bg-[#34d5dd18] px-2 py-3 rounded-lg font-semibold'
+                      : 'hover:text-[#00C2CB]'
+                  }
+                >
+                  <span>Home</span>
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  to="/contact"
+                  className={({ isActive, isPending }) =>
+                    isPending
+                      ? 'pending'
+                      : isActive
+                      ? 'text-green-400 bg-[#34d5dd18] px-2 py-3 rounded-lg font-semibold'
+                      : 'hover:text-[#00C2CB]'
+                  }
+                >
+                  <span> Contact</span>
+                </NavLink>
+              </li>
+            </ul>
 
             <div className="relative">
               <div className="flex flex-row items-center gap-3">
